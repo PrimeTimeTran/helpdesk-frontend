@@ -9,7 +9,6 @@ import {
 import HomePage from './pages/HomePage'
 import AdminPage from './pages/AdminPage'
 
-
 import Nav from './components/Nav'
 import Container from 'react-bootstrap/Container';
 
