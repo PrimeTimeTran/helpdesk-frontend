@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import Table from 'react-bootstrap/Table';
 import Container from 'react-bootstrap/Container';
 
+import TicketForm from '../components/TicketForm';
+
 import { getTickets } from '../utils/api'
 
 interface Ticket {
@@ -14,6 +16,7 @@ interface Ticket {
 
 export default function AdminPage() {
   const [tickets, setTickets] = useState<Ticket[]>([])
+  const [selectedTicket, setSelectedTicket] = useState<Ticket | undefined>()
   useEffect(() => {
     async function fetchTickets() {
       const tickets = await getTickets()
@@ -21,6 +24,11 @@ export default function AdminPage() {
     }
     fetchTickets()
   }, [])
+
+  const selectTicket = (id: number) => {
+    const ticket: Ticket = tickets.find(t => t.id == id)
+    setSelectedTicket(ticket)
+  }
 
   return (
     <>
@@ -40,7 +48,7 @@ export default function AdminPage() {
           <tbody>
             {tickets && tickets.map(t => {
               return (
-                <tr>
+                <tr onClick={() => selectTicket(t.id)}>
                   <td>{t.id}</td>
                   <td>{t.name}</td>
                   <td>{t.email}</td>
@@ -51,6 +59,7 @@ export default function AdminPage() {
             })}
           </tbody>
         </Table>
+        <TicketForm selectedTicket={selectedTicket} />
       </Container>
     </>
   )
