@@ -1,6 +1,7 @@
+const BASE_URL = 'http://127.0.0.1:5000'
 
 export const post = async (route, body) => {
-  const resp = await fetch(`http://127.0.0.1:5000/${route}`, {
+  const resp = await fetch(`${BASE_URL}/${route}`, {
     method: 'POST',
     body: JSON.stringify(body),
     mode: 'cors',
@@ -8,6 +9,12 @@ export const post = async (route, body) => {
       'Content-Type': 'application/json'
     },
   })
+  const json = await resp.json()
+  return json
+}
+
+export const getTickets = async () => {
+  const resp = await fetch(`${BASE_URL}/tickets`)
   const json = await resp.json()
   return json
 }

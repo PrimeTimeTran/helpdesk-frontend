@@ -18,7 +18,7 @@ interface Ticket {
 }
 
 export default function HomePage() {
-  const [ticket, setTicket] = useState<Ticket>({ name: '', email: '', description: '' })
+  const [ticket, setTicket] = useState<Ticket>({ name: 'hi', email: 'loi@gmaill.com', description: 'sososo' })
   const [quotes, setQuotes] = useState<Quote[]>([])
 
   const onChange = (attr: string, e: { target: { value: any; }; }) => {
@@ -55,7 +55,7 @@ export default function HomePage() {
             </Form.Text>
           </Form.Group>
           <Form.Group className="mb-3">
-            <Form.Label>Email address</Form.Label>
+            <Form.Label>Email</Form.Label>
             <Form.Control type="email" placeholder="john@mail.com" onChange={(e) => onChange('email', e)} value={ticket.email} />
             <Form.Text className="text-muted">
             </Form.Text>
