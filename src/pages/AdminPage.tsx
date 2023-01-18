@@ -9,6 +9,7 @@ interface Ticket {
   name: string
   email: string
   description: string
+  status: string
 }
 
 export default function AdminPage() {
@@ -33,6 +34,7 @@ export default function AdminPage() {
               <th>Name</th>
               <th>Email</th>
               <th>Description</th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody>
@@ -43,6 +45,7 @@ export default function AdminPage() {
                   <td>{t.name}</td>
                   <td>{t.email}</td>
                   <td>{t.description}</td>
+                  <td>{t.status}</td>
                 </tr>
               )
             })}
