@@ -1,57 +1,92 @@
-import React, { useEffect, useState } from 'react'
-
+import { useEffect, useState } from 'react'
 import Container from 'react-bootstrap/Container';
-export default function HomePage() {
-  const [text, setText] = useState('')
-  const [quotes, setQuotes] = useState([])
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 
-  const onChange = (e: { target: { value: any; }; }) => {
-    console.log(e.target.value);
-    setText(e.target.value)
+import { post } from '../utils/api';
+
+interface Quote {
+  id: number
+  body: string
+  author: string
+}
+
+interface Ticket {
+  name: string
+  email: string
+  description: string
+}
+
+export default function HomePage() {
+  const [ticket, setTicket] = useState<Ticket>({ name: '', email: '', description: '' })
+  const [quotes, setQuotes] = useState<Quote[]>([])
+
+  const onChange = (attr: string, e: { target: { value: any; }; }) => {
+    setTicket({ ...ticket, [attr]: e.target.value })
   }
 
   const onSubmit = async () => {
-    console.log({ text });
-    const resp = await fetch('http://127.0.0.1:5000/ticket', {
-      method: 'POST',
-      body: JSON.stringify({ text: text, bar: 'sososos', gello: 'wowowow' }),
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-    })
-    const json = await resp.json()
-    console.log({ json });
-    setText('')
+    const json = await post('ticket', ticket)
+    console.log({ json })
   }
 
   useEffect(() => {
     async function fetchStoic() {
       const resp = await fetch('https://stoicquotesapi.com/v1/api/quotes')
       const json = await resp.json()
-      setQuotes(json.data)
+      const quotes = json.data
+      const item = quotes[Math.floor(Math.random() * quotes.length)];
+
+      setQuotes([item])
     }
     fetchStoic()
   }, [])
 
   return (
     <>
-      <div>HomePage</div>
-      <input onChange={onChange} />
-      <button onClick={onSubmit}>Create Ticket</button>
-      <Container className='mt-5'>
-        {quotes && quotes.map(q => {
-          return <div key={q.id}>
-            <q>{q.body}</q>
-            <br></br>
-            <strong>{q.author}</strong>
-            <br></br>
-            <br></br>
-            <br></br>
-          </div>
-        })}
+      <div className="container mb-5 mt-5">
 
-      </Container>
+        <h3 className="text-center">Support Ticket Request</h3>
+        <Form className="w-50 col-lg-6 offset-lg-3 mt-5">
+          <Form.Group className="mb-3">
+            <Form.Label>Name</Form.Label>
+            <Form.Control type="name" placeholder="John Doe" onChange={(e) => onChange('name', e)} value={ticket.name} />
+            <Form.Text className="text-muted">
+            </Form.Text>
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Email address</Form.Label>
+            <Form.Control type="email" placeholder="john@mail.com" onChange={(e) => onChange('email', e)} value={ticket.email} />
+            <Form.Text className="text-muted">
+            </Form.Text>
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Description</Form.Label>
+            <Form.Control type="description" placeholder="Feeling..." onChange={(e) => onChange('description', e)} value={ticket.description} />
+            <Form.Text className="text-muted">
+            </Form.Text>
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="formBasicCheckbox">
+            <Form.Check type="checkbox" label="Email confirmation" />
+          </Form.Group>
+          <div className="d-grid gap-2">
+            <Button variant="primary" type="submit" size="lg" onClick={onSubmit}>
+            Submit
+          </Button>
+          </div>
+        </Form>
+        <Container className='mt-5 text-center'>
+          {quotes && quotes.map(q => {
+            return <div key={q.id}>
+              <q>{q.body}</q>
+              <br></br>
+              <strong>{q.author}</strong>
+              <br></br>
+              <br></br>
+            </div>
+          })}
+        </Container>
+      </div>
     </>
   )
 }
