@@ -1,7 +1,8 @@
-
 # Description
 
 Helpdesk Frontend
+
+![Demo](https://s3.gifyu.com/images/helpdeskdemo.gif)
 
 # Dependencies
 
