@@ -18,7 +18,7 @@ interface Ticket {
 }
 
 export default function HomePage() {
-  const [ticket, setTicket] = useState<Ticket>({ name: 'Loi Tran', email: 'loi@gmail.com', description: 'Enum is kinda buggy' })
+  const [ticket, setTicket] = useState<Ticket>({ name: '', email: '', description: '' })
   const [quotes, setQuotes] = useState<Quote[]>([])
 
   const onChange = (attr: string, e: { target: { value: any; }; }) => {

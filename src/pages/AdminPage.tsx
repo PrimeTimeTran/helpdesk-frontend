@@ -26,7 +26,7 @@ export default function AdminPage() {
   }, [])
 
   const selectTicket = (id: number) => {
-    const ticket: Ticket = tickets.find(t => t.id == id)
+    const ticket: Ticket | undefined = tickets.find(t => t.id == id)
     setSelectedTicket(ticket)
   }
 
@@ -59,7 +59,7 @@ export default function AdminPage() {
             })}
           </tbody>
         </Table>
-        <TicketForm selectedTicket={selectedTicket} />
+        {selectedTicket && <TicketForm selectedTicket={selectedTicket} />}
       </Container>
     </>
   )

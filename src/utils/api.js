@@ -18,3 +18,16 @@ export const getTickets = async () => {
   const json = await resp.json()
   return json
 }
+
+export const updateTicket = async (id, body) => {
+  const resp = await fetch(`${BASE_URL}/tickets/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify(body),
+    mode: 'cors',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  })
+  const json = await resp.json()
+  return json
+}

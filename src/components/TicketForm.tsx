@@ -7,21 +7,26 @@ import {
   Button
 } from 'react-bootstrap'
 
+import _ from 'lodash'
+
+import { updateTicket } from '../utils/api';
+
 interface Ticket {
   name: string
   email: string
   description: string
+  status: string
 }
 
 export default function TicketForm({ selectedTicket }) {
-  const [ticket, setTicket] = useState<Ticket>(selectedTicket)
+  const [ticket, setTicket] = useState<Ticket | undefined>(selectedTicket)
 
   const onChange = (attr: string, e: { target: { value: any; }; }) => {
     setTicket({ ...ticket, [attr]: e.target.value })
   }
 
   const onSubmit = async () => {
-    const json = await post('ticket', ticket)
+    const json = await updateTicket(ticket.id, ticket)
     console.log({ json })
   }
 
@@ -29,7 +34,7 @@ export default function TicketForm({ selectedTicket }) {
     setTicket(selectedTicket)
   }, [selectedTicket])
 
-  console.log({ selectedTicket });
+  console.log({ ticket });
 
   return (
     <div className="container">
@@ -59,24 +64,21 @@ export default function TicketForm({ selectedTicket }) {
             </Form.Group>
           </Col>
           <Col>
-            <Form.Group className="mb-3">
-              <Form.Control type="status" placeholder="new | progress | resolved " onChange={(e) => onChange('email', e)} value={ticket?.status} />
-              <Form.Text className="text-muted">
-              </Form.Text>
-            </Form.Group>
+            <Form.Select onChange={(e) => onChange('status', e)} value={ticket?.status}>
+              <option value="new">New</option>
+              <option value="progress">In Progress</option>
+              <option value="resolved">Resolved</option>
+            </Form.Select>
           </Col>
         </Row>
 
         <div className="d-grid gap-2">
+          {!_.isEqual(ticket, selectedTicket) && 
           <Button variant="primary" type="submit" size="lg" onClick={onSubmit}>
             Save
-          </Button>
+            </Button>}
         </div>
       </Form>
     </div>
   )
 }
-function post(arg0: string, ticket: Ticket) {
-  throw new Error('Function not implemented.');
-}
-
